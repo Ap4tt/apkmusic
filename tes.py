@@ -289,9 +289,6 @@ def input_string(prompt):
 # MAIN INTERFACE LOOP
 # ====================================
 playlist = MusicPlayerPlaylist()
-playlist.add_song("Bohemian Rhapsody", "Queen", 15)
-playlist.add_song("Hati-Hati di Jalan", "Tulus", 10)
-playlist.add_song("As It Was", "Harry Styles", 12)
 
 while True:
     if not playlist.is_playing:
