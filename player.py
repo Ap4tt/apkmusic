@@ -36,7 +36,6 @@ class Player:
     def run_player(self):
         while self.is_playing and self.current is not None:
             song = self.current
-            # Di sinilah lagu direset ke 0:00 setiap kali loop ini mengulang
             self.current_time = 0
 
             while self.current_time < song.duration:
@@ -62,14 +61,11 @@ class Player:
                     
                     # === LOGIKA REVISI RESTART LAGU PERTAMA ===
                     if song == self.playlist.head and not self.repeat:
-                        # Jangan ubah self.current.
-                        # Kita biarkan tetap di lagu yang sama.
+                        # Tidak ubah self.current dan tetap di lagu yang sama.
                         pass 
                     else:
                         # Jika aman, bergerak mundur menggunakan prev pointer
                         self.current = song.prev 
-                        
-                    # Break akan mengeluarkan eksekusi dari loop durasi detik.
                     # Program akan kembali ke 'self.current_time = 0' di atas.
                     break 
 
