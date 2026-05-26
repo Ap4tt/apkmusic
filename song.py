@@ -3,8 +3,6 @@ class Song:
     def __init__(self, db_id, title, artist, duration):
         # Menyimpan referensi ID Database aslinya
         self.db_id = db_id
-        
-        # Kalkulasi Playlist ID mengikuti Database ID (+1000)
         self.playlist_id = db_id + 1000
         
         self.title = title
