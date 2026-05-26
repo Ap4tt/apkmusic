@@ -25,13 +25,6 @@ def main():
     playlist = Playlist()
     player = Player(playlist)
 
-    print("\n[Sistem] Menyiapkan playlist otomatis dari Database...")
-    song1 = find_song_in_db("101")
-    if song1: playlist.add_song(song1['db_id'], song1['title'], song1['artist'], song1['duration'])
-    
-    song2 = find_song_in_db("102")
-    if song2: playlist.add_song(song2['db_id'], song2['title'], song2['artist'], song2['duration'])
-
     while True:
         if not player.is_playing:
             print("\n=============================================")
