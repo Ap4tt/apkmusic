@@ -5,7 +5,6 @@ class Playlist:
     def __init__(self):
         self.head = None
         self.tail = None
-        # self.next_id DIHAPUS. Kita menggunakan sinkronisasi DB ID sekarang.
 
     def get_length(self):
         if self.head is None: return 0
@@ -38,10 +37,10 @@ class Playlist:
 
     def add_song(self, db_id, title, artist, duration):
         """Menambahkan lagu dengan logika Doubly Circular"""
-        # Pengamanan ganda untuk mencegah duplikasi (bisa juga dicek di main.py)
+        # Pengamanan ganda untuk mencegah duplikasi
         if self.is_db_id_exist(db_id):
             return None
-
+            
         # Membuat Node baru (Playlist ID otomatis digenerate di dalam class Song)
         new_song = Song(db_id, title, artist, duration)
 
@@ -125,7 +124,7 @@ class Playlist:
                 if is_paused: status = " [PAUSED]"
                 elif is_playing: status = " [PLAYING]"
 
-            # Format Output Diperbarui
+            # Format Output
             print(f"{no}. [Playlist ID:{temp.playlist_id}] {temp.title} - {temp.artist} ({menit}:{detik:02d}){status}")
 
             temp = temp.next
