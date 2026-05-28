@@ -610,5 +610,395 @@ SONG_DATABASE = [
         "title": "Blood On Blood",
         "artist": "Bon Jovi",
         "duration": 377
+    },
+        {
+        "db_id": 103,
+        "title": "You Give Love A Bad Name",
+        "artist": "Bon Jovi",
+        "duration": 223
+    },
+    {
+        "db_id": 104,
+        "title": "Born To Be My Baby",
+        "artist": "Bon Jovi",
+        "duration": 280
+    },
+    {
+        "db_id": 105,
+        "title": "Smoke on the Water",
+        "artist": "Deep Purple",
+        "duration": 338
+    },
+    {
+        "db_id": 106,
+        "title": "For Whom The Bell Tolls - Remastered",
+        "artist": "Metallica",
+        "duration": 310
+    },
+    {
+        "db_id": 107,
+        "title": "Gunslinger",
+        "artist": "Avenged Sevenfold",
+        "duration": 252
+    },
+    {
+        "db_id": 108,
+        "title": "Seize the Day",
+        "artist": "Avenged Sevenfold",
+        "duration": 334
+    },
+    {
+        "db_id": 109,
+        "title": "What I've Done",
+        "artist": "Linkin Park",
+        "duration": 205
+    },
+    {
+        "db_id": 110,
+        "title": "LosT",
+        "artist": "Bring Me The Horizon",
+        "duration": 205
+    },
+    {
+        "db_id": 111,
+        "title": "Demons",
+        "artist": "Avenged Sevenfold",
+        "duration": 372
+    },
+    {
+        "db_id": 112,
+        "title": "Just Pretend",
+        "artist": "Bad Omens",
+        "duration": 205
+    },
+    {
+        "db_id": 113,
+        "title": "Dial Tone",
+        "artist": "Catch Your Breath",
+        "duration": 200
+    },
+    {
+        "db_id": 114,
+        "title": "Like A Villain",
+        "artist": "Bad Omens",
+        "duration": 211
+    },
+    {
+        "db_id": 115,
+        "title": "The Kill",
+        "artist": "Thirty Seconds To Mars",
+        "duration": 232
+    },
+    {
+        "db_id": 116,
+        "title": "The Pretender",
+        "artist": "Foo Fighters",
+        "duration": 269
+    },
+    {
+        "db_id": 117,
+        "title": "Scars",
+        "artist": "I Prevail",
+        "duration": 230
+    },
+    {
+        "db_id": 118,
+        "title": "Bad Medicine",
+        "artist": "Bon Jovi",
+        "duration": 317
+    },
+    {
+        "db_id": 119,
+        "title": "Time is Running Out",
+        "artist": "Muse",
+        "duration": 237
+    },
+    {
+        "db_id": 120,
+        "title": "Lonely Day",
+        "artist": "System Of A Down",
+        "duration": 168
+    },
+    {
+        "db_id": 121,
+        "title": "Drain You",
+        "artist": "Nirvana",
+        "duration": 224
+    },
+    {
+        "db_id": 122,
+        "title": "The Memory Remains",
+        "artist": "Metallica, Marianne Faithfull",
+        "duration": 279
+    },
+    {
+        "db_id": 123,
+        "title": "Drown",
+        "artist": "Bring Me The Horizon",
+        "duration": 222
+    },
+    {
+        "db_id": 124,
+        "title": "Lost",
+        "artist": "Avenged Sevenfold",
+        "duration": 302
+    },
+    {
+        "db_id": 125,
+        "title": "In The End",
+        "artist": "Black Veil Brides",
+        "duration": 228
+    },
+    {
+        "db_id": 126,
+        "title": "Burnout",
+        "artist": "Green Day",
+        "duration": 128
+    },
+    {
+        "db_id": 127,
+        "title": "Stabbing In The Dark",
+        "artist": "Ice Nine Kills",
+        "duration": 277
+    },
+    {
+        "db_id": 128,
+        "title": "1x1 (feat. Nova Twins)",
+        "artist": "Bring Me The Horizon, Nova Twins",
+        "duration": 210
+    },
+        {
+        "db_id": 129,
+        "title": "Pressure",
+        "artist": "Paramore",
+        "duration": 186
+    },
+    {
+        "db_id": 130,
+        "title": "Paranoid",
+        "artist": "Black Sabbath",
+        "duration": 168
+    },
+    {
+        "db_id": 131,
+        "title": "It's My Life",
+        "artist": "Bon Jovi",
+        "duration": 224
+    },
+    {
+        "db_id": 132,
+        "title": "King For A Day",
+        "artist": "Pierce The Veil, Kellin Quinn",
+        "duration": 236
+    },
+    {
+        "db_id": 133,
+        "title": "System Failure",
+        "artist": "If I Were You",
+        "duration": 236
+    },
+    {
+        "db_id": 134,
+        "title": "Scream",
+        "artist": "Avenged Sevenfold",
+        "duration": 289
+    },
+    {
+        "db_id": 135,
+        "title": "The Kids Aren't Alright",
+        "artist": "The Offspring",
+        "duration": 180
+    },
+    {
+        "db_id": 136,
+        "title": "Rape Me",
+        "artist": "Nirvana",
+        "duration": 170
+    },
+    {
+        "db_id": 137,
+        "title": "Youngest Daughter",
+        "artist": "Superheaven",
+        "duration": 250
+    },
+    {
+        "db_id": 138,
+        "title": "Nowhere To Go",
+        "artist": "Bad Omens",
+        "duration": 247
+    },
+    {
+        "db_id": 139,
+        "title": "Gimme Chocolate!!",
+        "artist": "BABYMETAL",
+        "duration": 231
+    },
+    {
+        "db_id": 140,
+        "title": "Bow Down",
+        "artist": "I Prevail",
+        "duration": 243
+    },
+    {
+        "db_id": 141,
+        "title": "A Greater Foundation",
+        "artist": "As I Lay Dying",
+        "duration": 226
+    },
+    {
+        "db_id": 142,
+        "title": "Gasoline",
+        "artist": "I Prevail",
+        "duration": 154
+    },
+    {
+        "db_id": 143,
+        "title": "Surfacing",
+        "artist": "Slipknot",
+        "duration": 218
+    },
+    {
+        "db_id": 144,
+        "title": "Fire & Forgive",
+        "artist": "Powerwolf",
+        "duration": 271
+    },
+    {
+        "db_id": 145,
+        "title": "Stand Up and Fight",
+        "artist": "Turisas",
+        "duration": 328
+    },
+    {
+        "db_id": 146,
+        "title": "Beast In Black",
+        "artist": "Beast In Black",
+        "duration": 269
+    },
+    {
+        "db_id": 147,
+        "title": "Resist and Bite",
+        "artist": "Sabaton",
+        "duration": 207
+    },
+    {
+        "db_id": 148,
+        "title": "Demons Are a Girl's Best Friend",
+        "artist": "Powerwolf",
+        "duration": 218
+    },
+    {
+        "db_id": 149,
+        "title": "Cry Thunder",
+        "artist": "DragonForce",
+        "duration": 316
+    },
+    {
+        "db_id": 150,
+        "title": "Siblings of Metal",
+        "artist": "Brothers of Metal",
+        "duration": 216
+    },
+    {
+        "db_id": 151,
+        "title": "Battle in the Sky",
+        "artist": "Bloodbound",
+        "duration": 265
+    },
+    {
+        "db_id": 152,
+        "title": "Blood of Heroes",
+        "artist": "Týr",
+        "duration": 222
+    },
+    {
+        "db_id": 153,
+        "title": "Call of the Sea",
+        "artist": "Kamelot",
+        "duration": 315
+    },
+    {
+        "db_id": 154,
+        "title": "Custer",
+        "artist": "Slipknot",
+        "duration": 254
+    },
+    {
+        "db_id": 155,
+        "title": "The Stage",
+        "artist": "Avenged Sevenfold",
+        "duration": 512
+    },
+    {
+        "db_id": 156,
+        "title": "First Date",
+        "artist": "blink-182",
+        "duration": 172
+    },
+    {
+        "db_id": 157,
+        "title": "All American Nightmare",
+        "artist": "Hinder",
+        "duration": 197
+    },
+    {
+        "db_id": 158,
+        "title": "Famous Last Words",
+        "artist": "My Chemical Romance",
+        "duration": 299
+    },
+    {
+        "db_id": 159,
+        "title": "Blank Space",
+        "artist": "I Prevail",
+        "duration": 241
+    },
+    {
+        "db_id": 160,
+        "title": "Bodies",
+        "artist": "Drowning Pool",
+        "duration": 202
+    },
+    {
+        "db_id": 161,
+        "title": "Freak On A Leash",
+        "artist": "Korn",
+        "duration": 256
+    },
+    {
+        "db_id": 162,
+        "title": "Break Stuff",
+        "artist": "Limp Bizkit",
+        "duration": 167
+    },
+    {
+        "db_id": 163,
+        "title": "The Sharpest Lives",
+        "artist": "My Chemical Romance",
+        "duration": 201
+    },
+    {
+        "db_id": 164,
+        "title": "Roots Bloody Roots",
+        "artist": "Sepultura",
+        "duration": 212
+    },
+    {
+        "db_id": 165,
+        "title": "Sonne",
+        "artist": "Rammstein",
+        "duration": 272
+    },
+    {
+        "db_id": 166,
+        "title": "A Trophy Father's Trophy Son",
+        "artist": "Sleeping With Sirens",
+        "duration": 223
+    },
+    {
+        "db_id": 167,
+        "title": "Suck My 401k",
+        "artist": "Jarrod Alonge, Amidst the Grave's Demons",
+        "duration": 218
     }
 ]
