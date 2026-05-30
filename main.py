@@ -92,30 +92,59 @@ def main():
         elif choice == "7":
             if not player.is_playing: print("\n[!] Tidak ada lagu yang sedang diputar.")
             else: player.next_song()
-                
+            playlist.display_playlist(player.current, player.is_playing, player.is_paused)    
         elif choice == "8":
             player.toggle_repeat()
 
         elif choice == "9":
             if playlist.head is None:
-                print("\n[!] Playlist kosong.")
+                print("\n[!] Playlist kosong. Tidak ada lagu yang bisa dihapus.")
                 continue
-            
-            playlist.display_playlist(player.current, player.is_playing, player.is_paused)
-            target_id = input_integer("\nMasukkan Playlist ID lagu yang ingin dihapus (0 untuk batal): ", min_val=0)
-            if target_id == 0: continue
 
-            if playlist.is_song_exist(target_id):
-                # Amankan pointer jika lagu yang dihapus sedang diputar
-                is_current = (player.current and player.current.playlist_id == target_id)
+            # LOOP LOKAL: Mengunci user di sini sampai memasukkan data yang benar atau memilih batal (0)
+            while True:
+                playlist.display_playlist(player.current, player.is_playing, player.is_paused)
+                delete_input = input("Masukkan Playlist ID / Judul Lagu (0 untuk batal): ").strip()
+                
+                # Validasi jika input kosong
+                if not delete_input:
+                    print("  [!] Invalid: Input tidak boleh kosong.")
+                    continue
+                    
+                # Jika user memilih angka 0, keluar dari loop hapus dan kembali ke menu utama
+                if delete_input == "0": 
+                    break
+
+                # Tentukan jenis input: jika angka diubah ke int, jika teks biarkan string
+                target = int(delete_input) if delete_input.isdigit() else delete_input
+
+                # --- PROSES VALIDASI SEBELUM DIHAPUS ---
+                temp_node = playlist.head
+                target_node = None
+                while True:
+                    if (isinstance(target, int) and temp_node.playlist_id == target) or \
+                       (isinstance(target, str) and temp_node.title.lower() == target.lower()):
+                        target_node = temp_node
+                        break
+                    temp_node = temp_node.next
+                    if temp_node == playlist.head: break
+
+                # JIKA TIDAK KETEMU: Tampilkan error, cetak playlist kembali, lalu ulang input (continue lokal)
+                if target_node is None:
+                    print(f"  [!] Invalid: Lagu atau ID '{delete_input}' tidak ditemukan di playlist.")
+                    continue # Ini akan mengulang ke baris "Masukkan Playlist ID..."
+
+                # --- PROSES EKSEKUSI PENGHAPUSAN AMAN (Jika data valid) ---
+                is_current = (player.current and player.current == target_node)
                 if is_current:
                     was_tail = (player.current == playlist.tail)
                     next_node = player.current.next
 
-                playlist.delete_song(target_id)
-                print(f"\n[-] Lagu [Playlist ID:{target_id}] berhasil dihapus!")
+                # Panggil fungsi gabungan di playlist.py milikmu
+                playlist.delete_song(target)
+                print(f"\n[-] Lagu '{target_node.title}' berhasil dihapus!")
 
-                # Alihkan pemutar otomatis jika lagunya terhapus
+                # Alihkan player otomatis jika lagu yang sedang berjalan dihapus
                 if is_current:
                     player.is_playing = False
                     time.sleep(0.3)
@@ -125,8 +154,8 @@ def main():
                         player.stop_player()
                     else:
                         player.play_from_song(next_node)
-            else:
-                print(f"\n[!] Playlist ID [{target_id}] tidak ditemukan di playlist saat ini.")
+                
+                break # Berhasil menghapus lagu, keluar dari loop lokal menuju menu utama
 
         elif choice == "0":
             if player.is_playing:
