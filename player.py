@@ -1,130 +1,144 @@
 import time
 import threading
+from utils import format_duration
 
 class Player:
-    """Engine player dengan multithreading dan navigasi Doubly Circular"""
-    def __init__(self, playlist):
-        self.playlist = playlist
-        self.current = None
-        self.is_playing = False
-        self.is_paused = False
-        self.repeat = False
-        self.current_time = 0
-        
-        self.manual_skip = False
-        self.manual_prev = False
+    """Engine playback dengan multithreading dan navigasi Doubly Circular"""
 
-    def play_from_song(self, song):
+    def __init__(self, playlist):
+        self.playlist     = playlist
+        self.current      = None
+        self.is_playing   = False
+        self.is_paused    = False
+        self.repeat       = False
+        self.current_time = 0
+        self.manual_skip  = False
+        self.manual_prev  = False
+
+    def _join_thread(self):
+        thread = getattr(self, '_thread', None)
+        if thread and thread.is_alive():
+            thread.join()
+
+    # ──────────────────────────────────────────
+    # Kontrol Utama
+    # ──────────────────────────────────────────
+
+    def play(self, song=None):
+        """
+        Mulai/restart playback.
+        Jika song=None, mulai dari head.
+        Jika sudah playing, hentikan thread lama dulu.
+        """
+        if song is None:
+            song = self.playlist.head
+        if song is None:
+            return
+
         if self.is_playing:
             self.is_playing = False
-            time.sleep(0.3) 
+            self._join_thread()
 
-        self.current = song
-        self.start_playback()
+        self.current      = song
+        self.is_playing   = True
+        self.is_paused    = False
+        self.manual_skip  = False
+        self.manual_prev  = False
 
-    def start_playback(self):
-        if self.current is None: return
-        self.is_playing = True
-        self.is_paused = False
-        self.manual_skip = False
-        self.manual_prev = False
+        self._thread = threading.Thread(target=self.run, daemon=True)
+        self._thread.start()
 
-        thread = threading.Thread(target=self.run_player)
-        thread.daemon = True
-        thread.start()
+    def pause(self):
+        if self.is_playing:
+            self.is_paused = True
 
-    def run_player(self):
-        while self.is_playing and self.current is not None:
-            song = self.current
-            self.current_time = 0
-
-            while self.current_time < song.duration:
-                if not self.is_playing: return
-
-                # Handle Next Manual
-                if self.manual_skip:
-                    self.manual_skip = False
-                    self.is_paused = False
-                    if song == self.playlist.tail and not self.repeat:
-                        self.clear_status_line("Playlist Selesai")
-                        self.is_playing = False
-                        self.current = None
-                        return
-                    else:
-                        self.current = song.next
-                        break
-
-                # Handle Previous Manual (Refactored ke Doubly Linked List)
-                if self.manual_prev:
-                    self.manual_prev = False
-                    self.is_paused = False
-                    
-                    # === LOGIKA REVISI RESTART LAGU PERTAMA ===
-                    if song == self.playlist.head and not self.repeat:
-                        # Tidak ubah self.current dan tetap di lagu yang sama.
-                        pass 
-                    else:
-                        # Jika aman, bergerak mundur menggunakan prev pointer
-                        self.current = song.prev 
-                    # Program akan kembali ke 'self.current_time = 0' di atas.
-                    break 
-
-                # Handle Pause
-                if self.is_paused:
-                    self.update_status_display(song, "PAUSED")
-                    time.sleep(0.2)
-                    continue
-
-                # Normal Playing
-                self.update_status_display(song, "PLAYING")
-                time.sleep(1)
-                
-                if self.is_playing and not self.is_paused and not self.manual_skip and not self.manual_prev:
-                    self.current_time += 1
-            else:
-                # Transisi lagu otomatis (waktu habis)
-                if not self.manual_skip and not self.manual_prev:
-                    if song == self.playlist.tail:
-                        if self.repeat:
-                            self.current = self.playlist.head
-                        else:
-                            self.clear_status_line("Selesai")
-                            self.is_playing = False
-                            self.current = None
-                            print(f"\n\nLagu '{song.title}' selesai. Playlist telah berakhir.")
-                            return
-                    else:
-                        self.current = song.next
-
-    def update_status_display(self, song, status):
-        menit_jalan = self.current_time // 60
-        detik_jalan = self.current_time % 60
-        menit_total = song.duration // 60
-        detik_total = song.duration % 60
-        repeat_status = "ON" if self.repeat else "OFF"
-        status_line = f" [{status}] {song.title} - {song.artist} [{menit_jalan}:{detik_jalan:02d} / {menit_total}:{detik_total:02d}] | Repeat: {repeat_status}"
-        print(f"\033[s\033[A\r\033[K{status_line}\033[u", end="", flush=True)
-
-    def clear_status_line(self, message):
-        print(f"\033[s\033[A\r\033[K [{message}]\033[u", end="", flush=True)
-
-    def pause_song(self):
-        if self.is_playing: self.is_paused = True
-
-    def resume_song(self):
-        if self.is_playing and self.is_paused: self.is_paused = False
+    def resume(self):
+        if self.is_playing and self.is_paused:
+            self.is_paused = False
 
     def next_song(self):
-        if self.is_playing and self.current: self.manual_skip = True
+        if self.is_playing and self.current:
+            self.manual_skip = True
 
-    def previous_song(self):
+    def prev_song(self):
         if self.is_playing and self.current:
             self.manual_prev = True
 
     def toggle_repeat(self):
         self.repeat = not self.repeat
 
-    def stop_player(self):
+    def stop(self):
         self.is_playing = False
-        self.is_paused = False
-        self.current = None
+        self.is_paused  = False
+        self.current    = None
+        self._join_thread()
+
+    def run(self):
+        while self.is_playing and self.current is not None:
+            song = self.current
+            self.current_time = 0
+
+            while self.current_time < song.duration:
+                # Proteksi: player dimatikan atau lagu berganti → keluar
+                if not self.is_playing or self.current != song:
+                    return
+
+                # Handle skip manual (Next)
+                if self.manual_skip:
+                    self.manual_skip = False
+                    self.is_paused   = False
+                    if song == self.playlist.tail and not self.repeat:
+                        self._clear("Playlist Selesai")
+                        self.is_playing = False
+                        self.current    = None
+                        return
+                    self.current = song.next
+                    break
+
+                # Handle prev manual (Previous)
+                if self.manual_prev:
+                    self.manual_prev = False
+                    self.is_paused   = False
+                    if song != self.playlist.head or self.repeat:
+                        self.current = song.prev
+                    break
+
+                # Pause — tunggu resume
+                if self.is_paused:
+                    self._display(song, "PAUSED")
+                    time.sleep(0.2)
+                    continue
+
+                # Playing normal
+                self._display(song, "PLAYING")
+                time.sleep(1)
+                if self.is_playing and not self.is_paused and \
+                   not self.manual_skip and not self.manual_prev:
+                    self.current_time += 1
+
+            else:
+                # Lagu habis secara alami
+                if self.manual_skip or self.manual_prev:
+                    continue
+                if song == self.playlist.tail:
+                    if self.repeat:
+                        self.current = self.playlist.head
+                    else:
+                        self._clear("Selesai")
+                        self.is_playing = False
+                        self.current    = None
+                        print(f"\n\nLagu '{song.title}' Selesai. Playlist Berakhir.")
+                        return
+                else:
+                    self.current = song.next
+
+    def _display(self, song, status):
+        line = (
+            f" [{status}] {song.title} - {song.artist} "
+            f"[{format_duration(self.current_time)}/{format_duration(song.duration)}] "
+            f"| Repeat: {'ON' if self.repeat else 'OFF'}"
+        )
+        print(f"\033[s\033[A\r\033[K{line}\033[u", end="", flush=True)
+
+    def _clear(self, message):
+        print(f"\033[s\033[A\r\033[K [{message}]\033[u", end="", flush=True)
