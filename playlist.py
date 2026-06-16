@@ -2,27 +2,23 @@ from song import Song
 from utils import format_duration
 
 class Playlist:
-    """Doubly Circular Linked List untuk menyimpan antrian lagu"""
-
-    def __init__(self):
+    def __init__(self, name="Playlist"):
+        self.name = name
         self.head = None
         self.tail = None
 
     def add_song(self, title, artist, duration):
-        """Tambah node baru di akhir linked list"""
         node = Song(title, artist, duration)
 
-        if self.head is None:
-            # Circular self-reference saat playlist masih kosong
+        if self.head is None:            # playlist masih kosong
             self.head = self.tail = node
-            node.next = node.prev = node
+            node.next = node.prev = node # circular ke diri sendiri
         else:
-            # Sambungkan node baru di belakang tail
-            node.prev       = self.tail
-            node.next       = self.head
-            self.tail.next  = node
-            self.head.prev  = node
-            self.tail       = node
+            node.prev       = self.tail # sambung ke belakang (tail)
+            node.next       = self.head  # sambung ke depan (head)
+            self.tail.next  = node # sambung tail lama ke node baru
+            self.head.prev  = node # sambung head lama ke node baru
+            self.tail       = node # update tail ke node baru
 
         return node
 
@@ -39,12 +35,39 @@ class Playlist:
                 break
         return None
 
+    def get_by_index(self, index):
+        """Cari node berdasarkan nomor urut (1-based). Return None jika tidak ada."""
+        if self.head is None or index < 1:
+            return None
+        cur, no = self.head, 1
+        while True:
+            if no == index:
+                return cur
+            cur = cur.next
+            no += 1
+            if cur == self.head:
+                return None
+
+    def find(self, query):
+        """Cari lagu berdasarkan nomor urut ATAU judul, tergantung input user."""
+        query = query.strip()
+        if query.isdigit():
+            return self.get_by_index(int(query))
+        return self.find_node(query)
+
+    def count(self):
+        """Hitung jumlah lagu dalam playlist."""
+        if self.head is None:
+            return 0
+        cur, total = self.head, 0
+        while True:
+            total += 1
+            cur = cur.next
+            if cur == self.head:
+                break
+        return total
+
     def delete_song(self, node):
-        """
-        Hapus node yang sudah diketahui dari linked list.
-        Menerima objek Song langsung (bukan judul) agar caller bisa
-        mengambil node.next sebelum penghapusan untuk kebutuhan auto-play.
-        """
         if self.head is None:
             return
 
@@ -71,12 +94,12 @@ class Playlist:
         node.prev.next = node.next
         node.next.prev = node.prev
 
-    def display(self, current, is_playing, is_paused):
+    def display(self, current=None, is_playing=False, is_paused=False):
         if self.head is None:
-            print("\n[!] Playlist kosong.")
+            print(f"\n[!] '{self.name}' kosong.")
             return
 
-        print("\n═══════════════════ PLAYLIST ═══════════════════")
+        print(f"\n═══════════════ {self.name} ═══════════════")
         cur, no = self.head, 1
         while True:
             status = ""
@@ -87,4 +110,4 @@ class Playlist:
             no += 1
             if cur == self.head:
                 break
-        print("═════════════════════════════════════════════════\n")
+        print("════════════════════════════════════════\n")
