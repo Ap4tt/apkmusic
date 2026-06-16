@@ -3,33 +3,28 @@ import threading
 from utils import format_duration
 
 class Player:
-    """Engine playback dengan multithreading dan navigasi Doubly Circular"""
-
-    def __init__(self, playlist):
-        self.playlist     = playlist
-        self.current      = None
-        self.is_playing   = False
-        self.is_paused    = False
-        self.repeat       = False
-        self.current_time = 0
-        self.manual_skip  = False
-        self.manual_prev  = False
+    def __init__(self):
+        self.playlist     = None     # playlist AKTIF (yang baru/sedang diputar)
+        self.current      = None     # node yang sedang diputar
+        self.is_playing   = False    # status player
+        self.is_paused    = False    # status pause
+        self.repeat       = False    # repeat on/off
+        self.manual_skip  = False    # sinyal next dari user
+        self.manual_prev  = False    # sinyal prev dari user
 
     def _join_thread(self):
         thread = getattr(self, '_thread', None)
         if thread and thread.is_alive():
             thread.join()
 
-    # ──────────────────────────────────────────
-    # Kontrol Utama
-    # ──────────────────────────────────────────
+    def play_playlist(self, playlist, song=None):
+        """Jadikan `playlist` sebagai playlist aktif, lalu mulai memutar."""
+        self.playlist = playlist
+        self.play(song)
 
     def play(self, song=None):
-        """
-        Mulai/restart playback.
-        Jika song=None, mulai dari head.
-        Jika sudah playing, hentikan thread lama dulu.
-        """
+        if self.playlist is None:
+            return
         if song is None:
             song = self.playlist.head
         if song is None:
@@ -79,7 +74,6 @@ class Player:
             self.current_time = 0
 
             while self.current_time < song.duration:
-                # Proteksi: player dimatikan atau lagu berganti → keluar
                 if not self.is_playing or self.current != song:
                     return
 
@@ -105,12 +99,12 @@ class Player:
 
                 # Pause — tunggu resume
                 if self.is_paused:
-                    self._display(song, "PAUSED")
+                    self.current_display(song, "PAUSED")
                     time.sleep(0.2)
                     continue
 
                 # Playing normal
-                self._display(song, "PLAYING")
+                self.current_display(song, "PLAYING")
                 time.sleep(1)
                 if self.is_playing and not self.is_paused and \
                    not self.manual_skip and not self.manual_prev:
@@ -132,9 +126,9 @@ class Player:
                 else:
                     self.current = song.next
 
-    def _display(self, song, status):
+    def current_display(self, song, status):
         line = (
-            f" [{status}] {song.title} - {song.artist} "
+            f" [{status}] {self.playlist.name} » {song.title} - {song.artist} "
             f"[{format_duration(self.current_time)}/{format_duration(song.duration)}] "
             f"| Repeat: {'ON' if self.repeat else 'OFF'}"
         )
