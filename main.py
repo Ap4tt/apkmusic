@@ -182,7 +182,7 @@ def menu_utama():
 def menu_playing(player):
     player.playlist.display(player.current, player.is_playing, player.is_paused)
     print("─" * 56)
-    return input("3.Pause  4.Resume  5.Previous  6.Next  7.Repeat  8.Lihat Playlist  0.Stop: ").strip()
+    return input("3.Pause  4.Resume  5.Previous  6.Next  7.Repeat  8.Lihat Playlist  9.Hapus Lagu  0.Stop: ").strip()
 
 
 def main():
@@ -231,6 +231,9 @@ def main():
                         else:
                             pl.display()
                 input("\nTekan ENTER Untuk Kembali ke Player...")
+                
+            elif choice == "9":
+                delete_song_from_playlist(playlists, player)
 
             elif choice == "0":
                 player.stop()
