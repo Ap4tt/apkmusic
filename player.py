@@ -4,13 +4,14 @@ from utils import format_duration
 
 class Player:
     def __init__(self):
-        self.playlist     = None     # playlist AKTIF (yang baru/sedang diputar)
-        self.current      = None     # node yang sedang diputar
-        self.is_playing   = False    # status player
-        self.is_paused    = False    # status pause
-        self.repeat       = False    # repeat on/off
-        self.manual_skip  = False    # sinyal next dari user
-        self.manual_prev  = False    # sinyal prev dari user
+        self.playlist      = None     # playlist AKTIF (yang baru/sedang diputar)
+        self.current       = None     # node yang sedang diputar
+        self.is_playing    = False    # status player
+        self.is_paused     = False    # status pause
+        self.repeat        = False    # repeat on/off
+        self.manual_skip   = False    # sinyal next dari user
+        self.manual_prev   = False    # sinyal prev dari user
+        self._song_changed = threading.Event()  # sinyal: self.current sudah diupdate thread run()
 
     def _join_thread(self):
         thread = getattr(self, '_thread', None)
@@ -18,7 +19,6 @@ class Player:
             thread.join()
 
     def play_playlist(self, playlist, song=None):
-        """Jadikan `playlist` sebagai playlist aktif, lalu mulai memutar."""
         self.playlist = playlist
         self.play(song)
 
@@ -53,11 +53,15 @@ class Player:
 
     def next_song(self):
         if self.is_playing and self.current:
+            self._song_changed.clear()
             self.manual_skip = True
+            self._song_changed.wait(timeout=2.0)
 
     def prev_song(self):
         if self.is_playing and self.current:
+            self._song_changed.clear()
             self.manual_prev = True
+            self._song_changed.wait(timeout=2.0)
 
     def toggle_repeat(self):
         self.repeat = not self.repeat
@@ -85,8 +89,10 @@ class Player:
                         self._clear("Playlist Selesai")
                         self.is_playing = False
                         self.current    = None
+                        self._song_changed.set()
                         return
                     self.current = song.next
+                    self._song_changed.set()
                     break
 
                 # Handle prev manual (Previous)
@@ -95,6 +101,7 @@ class Player:
                     self.is_paused   = False
                     if song != self.playlist.head or self.repeat:
                         self.current = song.prev
+                    self._song_changed.set()
                     break
 
                 # Pause — tunggu resume
